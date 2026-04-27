@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404" currentPath="/404">
+  <div class="flex-grow overflow-y-auto p-8 custom-scrollbar flex items-center justify-center">
+    <div class="w-full max-w-2xl text-center">
+      <div class="tui-border bg-[#1a1a1a] p-12">
+        <div class="flex items-center justify-center mb-8">
+          <span class="material-symbols-outlined text-6xl text-error animate-pulse">wifi_off</span>
+        </div>
+        
+        <h1 class="font-display-lg text-4xl text-error mb-4">CONNECTION_LOST</h1>
+        
+        <div class="font-label-mono text-[10px] text-on-surface-variant uppercase mb-8">
+          [ ERROR: 404 — PAGE NOT FOUND ]
+        </div>
+        
+        <div class="text-left font-body-reg text-sm text-on-surface-variant/60 bg-[#0e0e0e] p-4 mb-8">
+          <p class="mb-2">$ cat /var/logs/error.log</p>
+          <p class="mb-2">> FATAL: page not found at {Astro.url.pathname}</p>
+          <p class="mb-2">> CONN: reset to root node...</p>
+          <p class="mb-2">> RETRY: attempt 1/3...</p>
+          <p class="text-error">! CONNECTION REFUSED</p>
+          <p class="mb-2"></p>
+          <p class="text-secondary">_ system halted on critical failure</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/" 
+            class="inline-flex items-center justify-center p-3 bg-emerald-900/20 border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all"
+          >
+            <span class="material-symbols-outlined mr-2">home</span>
+            <span class="font-body-reg text-sm lowercase">[ return_home ]</span>
+          </a>
+          
+          <a 
+            href="mailto:tom@tomma.studio" 
+            class="inline-flex items-center justify-center p-3 bg-emerald-900/20 border border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary transition-all"
+          >
+            <span class="material-symbols-outlined mr-2">bug_report</span>
+            <span class="font-body-reg text-sm lowercase">[ report_issue ]</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="mt-8 font-label-mono text-[10px] text-on-surface-variant/40">
+        <p>PID: {Math.floor(Math.random() * 9999).toString().padStart(4, '0')}</p>
+        <p>TIMESTAMP: {new Date().toISOString()}</p>
+        <p>ACTION: manual recovery required</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+</style>

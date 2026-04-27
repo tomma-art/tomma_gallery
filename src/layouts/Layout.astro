@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import TommaLogo from '../components/TommaLogo';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  currentPath?: string;
+}
+
+const { title, currentPath = '/' } = Astro.props;
+
+const navItems = [
+  { path: '/', label: 'home', icon: 'home' },
+  { path: '/films', label: 'films', icon: 'movie' },
+  { path: '/art', label: 'art', icon: 'brush' },
+  { path: '/labs', label: 'labs', icon: 'biotech' },
+  { path: '/about', label: 'about', icon: 'person' },
+];
+
+const isActive = (path: string) => currentPath === path || (currentPath === '/' && path === '/');
+---
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Doto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1" rel="stylesheet" />
+  <title>{title} | tomma</title>
+  <ClientRouter />
+</head>
+<body class="font-body-reg text-on-surface selection:bg-secondary selection:text-on-secondary overflow-hidden h-screen">
+  <aside class="flex flex-col h-full fixed left-0 top-0 p-4 w-[170px] h-screen border-r border-emerald-900/30 bg-[#2B3D37] z-50">
+    <div class="mb-10 flex flex-col items-center text-center" data-astro-transition="persist">
+      <TommaLogo client:load />
+      <p class="font-label-mono text-[10px] text-emerald-100/40 mt-1 text-center">tomma.gallery v1.1 -stable</p>
+    </div>
+    <nav class="flex-grow space-y-1">
+      {navItems.map((item) => (
+        <a 
+          class={`flex items-center p-2 transition-colors duration-150 text-sm lowercase tracking-tight ${
+            isActive(item.path) 
+              ? 'text-[#9cff93] font-bold before:content-[">"] before:mr-2 bg-emerald-900/40' 
+              : 'text-emerald-100/50 hover:text-emerald-50 hover:bg-emerald-900/20'
+          }`}
+          href={item.path}
+        >
+          <span class="material-symbols-outlined mr-3 text-lg">{item.icon}</span>
+          <span>{item.label}</span>
+        </a>
+      ))}
+    </nav>
+    <div class="mt-auto space-y-2 pt-4 border-t border-emerald-900/50">
+      <div class="flex items-center justify-between px-2 text-[10px] font-label-mono text-emerald-100/40">
+        <div class="flex items-center">
+          <span class="material-symbols-outlined text-[12px] mr-1">speed</span>
+          <span>lat: 24ms</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-2 text-[10px] font-label-mono text-[#9cff93]">
+        <div class="flex items-center">
+          <span class="material-symbols-outlined text-[12px] mr-1">check_circle</span>
+          <span>online</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <main class="ml-[170px] h-screen flex flex-col bg-[#131313]">
+    <slot />
+  </main>
+</body>
+</html>

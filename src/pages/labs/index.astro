@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { DitherWave, MatrixRain, NoiseField, GlitchText } from '../../components/Demos';
+
+const projects = [
+  { id: '001', name: 'bible-cli', lang: 'rust', desc: 'command-line bible reader with fuzzy search', stars: 12, status: 'active' },
+  { id: '002', name: 'snes-platformer', lang: 'swift', desc: 'super nintendo-style platformer engine', stars: 8, status: 'active' },
+  { id: '003', name: 'tomma-ascii', lang: 'typescript', desc: 'ascii art generator with custom maps', stars: 24, status: 'active' },
+  { id: '004', name: 'meris-controller', lang: 'swift', desc: 'ios app for meris eurorack synths', stars: 45, status: 'active' },
+  { id: '005', name: 'tomma-art-generative', lang: 'python', desc: 'neural network art experiments', stars: 67, status: 'archived' },
+  { id: '006', name: 'noise-synth', lang: 'rust', desc: 'audio synthesis with noise algorithms', stars: 19, status: 'experimental' }
+];
+---
+
+<Layout title="labs" currentPath="/labs">
+  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
+    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
+      <span class="text-secondary">[ root ]</span>
+      <span class="opacity-30">/</span>
+      <span>labs</span>
+      <span class="opacity-30">/</span>
+      <span class="text-primary-fixed-dim">projects.sh</span>
+    </div>
+    <div class="flex items-center space-x-6">
+      <div class="flex space-x-1">
+        <span class="w-2 h-2 rounded-full bg-error/40"></span>
+        <span class="w-2 h-2 rounded-full bg-secondary/40"></span>
+        <span class="w-2 h-2 rounded-full bg-primary/40"></span>
+      </div>
+    </div>
+  </header>
+  
+  <div class="flex-grow overflow-y-auto p-8 custom-scrollbar">
+    <div class="mb-12 border-l-2 border-secondary pl-6">
+      <h2 class="font-display-lg text-2xl text-primary lowercase mb-2">code_labs</h2>
+      <p class="font-body-reg text-sm text-on-surface-variant max-w-2xl">
+        ━━━━ experimental code repositories. all projects rendered in raw format.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+      <DitherWave client:load />
+      <MatrixRain client:load />
+      <NoiseField client:load />
+      <GlitchText client:load />
+    </div>
+    
+    <div class="space-y-1">
+      <div class="grid grid-cols-12 gap-1 px-3 py-2 font-label-mono text-[10px] text-on-surface-variant uppercase">
+        <div class="col-span-1">pid</div>
+        <div class="col-span-3">project</div>
+        <div class="col-span-2">lang</div>
+        <div class="col-span-4">description</div>
+        <div class="col-span-1">stars</div>
+        <div class="col-span-1">status</div>
+      </div>
+      
+      {projects.map((project) => (
+        <div class="tui-border bg-[#1a1a1a] hover:bg-[#201f1f] transition-all group">
+          <div class="grid grid-cols-12 gap-1 px-3 py-4 items-center">
+            <div class="col-span-1">
+              <span class="font-label-mono text-[10px] text-secondary uppercase">{project.id}</span>
+            </div>
+            <div class="col-span-3">
+              <span class="font-headline-md text-white lowercase">{project.name}</span>
+            </div>
+            <div class="col-span-2">
+              <span class="font-label-mono text-[10px] border border-outline-variant text-on-surface-variant px-2 py-0.5 lowercase">{project.lang}</span>
+            </div>
+            <div class="col-span-4">
+              <span class="font-body-reg text-sm text-on-surface-variant">{project.desc}</span>
+            </div>
+            <div class="col-span-1">
+              <span class="font-label-mono text-[10px] text-on-surface-variant">{project.stars}</span>
+            </div>
+            <div class="col-span-1">
+              <span class={`font-label-mono text-[10px] border px-2 py-0.5 lowercase ${
+                project.status === 'active' ? 'border-secondary text-secondary' :
+                project.status === 'experimental' ? 'border-yellow-500 text-yellow-500' :
+                'border-outline-variant text-on-surface-variant'
+              }`}>{project.status}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

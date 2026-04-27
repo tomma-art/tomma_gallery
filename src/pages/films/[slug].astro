@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Lightbox from '../../components/Lightbox';
+import { getFilm, getAllFilms } from '../../content/films/loader';
+
+export function getStaticPaths() {
+  return getAllFilms().map(film => ({
+    params: { slug: film.slug },
+    props: { film }
+  }));
+}
+
+const { film } = Astro.props;
+---
+
+<Layout title={film.title} currentPath="/films">
+  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
+    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
+      <span class="text-secondary">[ root ]</span>
+      <span class="opacity-30">/</span>
+      <span>films</span>
+      <span class="opacity-30">/</span>
+      <span class="text-primary-fixed-dim">{film.slug}</span>
+    </div>
+  </header>
+
+  <div class="flex-grow overflow-y-auto custom-scrollbar">
+    <!-- Hero / Trailer Block -->
+    <section class="w-full aspect-video relative bg-black">
+      {film.videoUrl ? (
+        <iframe 
+          src={film.videoUrl} 
+          class="w-full h-full absolute inset-0"
+          frameborder="0" 
+          allow="autoplay; fullscreen"
+          allowfullscreen
+        />
+      ) : (
+        <div class="w-full h-full flex items-center justify-center bg-[#0a0a0a]">
+          <span class="material-symbols-outlined text-6xl text-emerald-100/20">videocam</span>
+        </div>
+      )}
+    </section>
+
+    <!-- Film Info -->
+    <section class="p-8 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Title & Copy -->
+        <div class="lg:col-span-2 space-y-6">
+          <h1 class="font-display-lg text-3xl text-white lowercase">{film.title}</h1>
+          <p class="font-body-reg text-on-surface-variant leading-relaxed">
+            {film.description}
+          </p>
+          
+          <!-- Tech Specs -->
+          <div class="tui-border bg-[#1a1a1a] p-4">
+            <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ technical_specs ]</h2>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div><span class="text-on-surface-variant">Runtime:</span> <span class="text-white ml-2">{film.runtime}</span></div>
+              <div><span class="text-on-surface-variant">Format:</span> <span class="text-white ml-2">{film.format}</span></div>
+              <div><span class="text-on-surface-variant">Resolution:</span> <span class="text-white ml-2">{film.resolution}</span></div>
+              <div><span class="text-on-surface-variant">Year:</span> <span class="text-white ml-2">{film.year}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Info -->
+        <div class="space-y-4">
+          <div class="tui-border bg-[#1a1a1a] p-4">
+            <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ client ]</h2>
+            <p class="text-white">{film.client}</p>
+          </div>
+          
+          <div class="tui-border bg-[#1a1a1a] p-4">
+            <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ role ]</h2>
+            <p class="text-white">{film.role}</p>
+          </div>
+          
+          {film.awards && film.awards.length > 0 && (
+            <div class="tui-border bg-[#1a1a1a] p-4">
+              <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ awards ]</h2>
+              {film.awards.map((award) => (
+                <p class="text-white mb-1 text-sm">{award}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    {film.stills && film.stills.length > 0 && (
+    <section class="px-8 pb-8">
+      <div class="tui-border bg-[#1a1a1a] p-4 mb-4">
+        <h2 class="font-label-mono text-[10px] text-secondary uppercase">[ gallery ]</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        {film.stills.map((still, i) => (
+          <button 
+            class="aspect-video bg-[#0a0a0a] overflow-hidden cursor-pointer group"
+            onclick={`window.openLightbox(${i})`}
+          >
+            <img 
+              src={still} 
+              alt={`Still ${i + 1}`}
+              class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+            />
+          </button>
+        ))}
+      </div>
+    </section>
+    )}
+
+    <!-- Credits -->
+    {film.credits && film.credits.length > 0 && (
+    <section class="px-8 pb-16">
+      <div class="tui-border bg-[#1a1a1a] p-6">
+        <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-4">[ credits ]</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {film.credits.map((credit) => (
+            <div>
+              <span class="font-label-mono text-[10px] text-secondary">{credit.role}</span>
+              <p class="text-white">{credit.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    )}
+  </div>
+
+  <Lightbox client:load images={film.stills || []} />
+</Layout>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar { width: 2px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #9cff93; }
+</style>

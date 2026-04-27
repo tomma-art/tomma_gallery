@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const brands = [
+  'Roland', 'Petland', 'University of Michigan', 'Compassion International', 
+  'Red Sea Media', 'Stark United', 'Family Life', 'Alpha US',
+  'Sound & Color', 'Tell Studios', 'LaBelle Electric', 'Wireless Vision'
+];
+
+const socials = [
+  { name: 'email', link: 'mailto:tom@tomma.studio', icon: 'email' },
+  { name: 'instagram', link: 'https://instagram.com', icon: 'chat' },
+  { name: 'linkedin', link: 'https://linkedin.com', icon: 'work' },
+  { name: 'vimeo', link: 'https://vimeo.com', icon: 'movie' }
+];
+---
+
+<Layout title="about" currentPath="/about">
+  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
+    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
+      <span class="text-secondary">[ root ]</span>
+      <span class="opacity-30">/</span>
+      <span>about</span>
+      <span class="opacity-30">/</span>
+      <span class="text-primary-fixed-dim">profile.sh</span>
+    </div>
+    <div class="flex items-center space-x-6">
+      <div class="flex space-x-1">
+        <span class="w-2 h-2 rounded-full bg-error/40"></span>
+        <span class="w-2 h-2 rounded-full bg-secondary/40"></span>
+        <span class="w-2 h-2 rounded-full bg-primary/40"></span>
+      </div>
+    </div>
+  </header>
+  
+  <div class="flex-grow overflow-y-auto p-8 custom-scrollbar">
+    <div class="max-w-4xl">
+      <div class="mb-12 border-l-2 border-secondary pl-6">
+        <h2 class="font-display-lg text-2xl text-primary lowercase mb-2">about_tomma</h2>
+        <p class="font-body-reg text-sm text-on-surface-variant max-w-2xl">
+          ━━━━ operator profile and credentials
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+        <div class="tui-border bg-[#1a1a1a] lg:col-span-1">
+          <div class="aspect-square relative overflow-hidden bg-[#0e0e0e]">
+            <img 
+              class="w-full h-full object-cover opacity-80" 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d7?w=400&h=400&fit=crop&crop=face"
+              alt="Tom Maher portrait"
+            />
+          </div>
+          <div class="p-4 border-t border-emerald-900/20">
+            <span class="font-label-mono text-[10px] text-secondary uppercase">[ PORTRAIT ]</span>
+          </div>
+        </div>
+        
+        <div class="tui-border bg-[#1a1a1a] p-6 lg:col-span-2">
+          <h3 class="font-headline-md text-xl text-white lowercase mb-4">Tom Maher</h3>
+          <p class="font-body-reg text-sm text-on-surface-variant leading-relaxed mb-6">
+            visual designer • storyteller • filmmaker
+          </p>
+          <p class="font-body-reg text-sm text-on-surface-variant leading-relaxed">
+            Adaptive creative with 15+ years of experience as a filmmaker, 
+            editor, and animator. Aiming to leverage expertise in video editing, 
+            motion design, and storytelling to create compelling content that 
+            inspires and engages global audiences.
+          </p>
+          <p class="font-body-reg text-sm text-on-surface-variant leading-relaxed mt-4">
+            Based in Brooklyn, NY. Creating since 2015. Available for 
+            freelance projects and collaborations.
+          </p>
+        </div>
+      </div>
+      
+      <div class="tui-border bg-[#1a1a1a] p-6 mb-12">
+        <div class="flex items-center justify-between mb-6">
+          <span class="font-label-mono text-[10px] text-secondary uppercase">[ clients ]</span>
+          <span class="font-label-mono text-[10px] text-on-surface-variant opacity-50">{brands.length} verified</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {brands.map((brand) => (
+            <span class="font-label-mono text-[10px] border border-outline-variant text-on-surface-variant px-3 py-1 lowercase">
+              {brand}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      <div class="tui-border bg-[#1a1a1a] p-6">
+        <div class="flex items-center justify-between mb-6">
+          <span class="font-label-mono text-[10px] text-secondary uppercase">[ contact ]</span>
+          <span class="font-label-mono text-[10px] text-[#9cff93]">online</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {socials.map((social) => (
+            <a 
+              href={social.link}
+              class="flex items-center p-3 bg-[#131313] border border-emerald-900/20 hover:border-secondary hover:text-secondary transition-all group"
+            >
+              <span class="material-symbols-outlined text-lg mr-2">{social.icon}</span>
+              <span class="font-body-reg text-sm lowercase">{social.name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllFilms } from '../../content/films/loader';
+
+const films = getAllFilms();
+---
+
+<Layout title="films" currentPath="/films">
+  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
+    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
+      <span class="text-secondary">[ root ]</span>
+      <span class="opacity-30">/</span>
+      <span>films</span>
+      <span class="opacity-30">/</span>
+      <span class="text-primary-fixed-dim">index.sh</span>
+    </div>
+    <div class="flex items-center space-x-6">
+      <div class="flex space-x-1">
+        <span class="w-2 h-2 rounded-full bg-error/40"></span>
+        <span class="w-2 h-2 rounded-full bg-secondary/40"></span>
+        <span class="w-2 h-2 rounded-full bg-primary/40"></span>
+      </div>
+    </div>
+  </header>
+  
+  <div class="flex-grow overflow-y-auto p-8 custom-scrollbar">
+    <div class="mb-12 border-l-2 border-secondary pl-6">
+      <h2 class="font-display-lg text-2xl text-primary lowercase mb-2">film_index</h2>
+      <p class="font-body-reg text-sm text-on-surface-variant max-w-2xl">
+        ━━━━ archival log of cinematographic assets and visual experiments. 
+        all entries are rendered in raw format. browse by technical metadata.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+      {films.map((film) => (
+        <a href={`/films/${film.slug}`} class="tui-border bg-[#1a1a1a] hover:bg-[#201f1f] transition-all group overflow-hidden block">
+          <div class="h-8 flex items-center justify-between px-3 bg-emerald-900/10 border-b border-emerald-900/20">
+            <span class="font-label-mono text-[10px] text-secondary tracking-tighter uppercase">[ PID: {film.slug.slice(0,3).toUpperCase()} ]</span>
+            <span class="font-label-mono text-[10px] text-on-surface-variant opacity-50">{film.year || film.date}</span>
+          </div>
+          <div class="aspect-video relative overflow-hidden bg-black">
+            <img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500" src={film.image || film.stills?.[0]} alt={film.title} />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <div class="absolute bottom-4 left-4">
+              <h3 class="font-headline-md text-lg text-white lowercase">{film.title}</h3>
+            </div>
+          </div>
+          <div class="p-4 space-y-4">
+            <div class="flex flex-wrap gap-2">
+              <span class={`text-[10px] font-label-mono border px-2 py-0.5 lowercase ${film.status === 'live' ? 'border-primary text-primary' : film.status === 'processing' ? 'border-yellow-500 text-yellow-500' : 'border-secondary text-secondary'}`}>
+                [{film.status || 'archived'}]
+              </span>
+              {film.format && (
+                <span class="text-[10px] font-label-mono border border-outline-variant text-on-surface-variant px-2 py-0.5 lowercase">{film.format}</span>
+              )}
+              {film.fps && (
+                <span class="text-[10px] font-label-mono border border-outline-variant text-on-surface-variant px-2 py-0.5 lowercase">{film.fps}</span>
+              )}
+            </div>
+            <div class="flex justify-between items-center text-[10px] font-label-mono text-on-surface-variant/40">
+              <span>duration: {film.duration || film.runtime}</span>
+              <span class="group-hover:text-secondary transition-colors">[ view ]</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
