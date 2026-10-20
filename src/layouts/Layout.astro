@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import TommaLogo from '../components/TommaLogo';
+import ShaderBg from '../components/ShaderBg';
+import NowPlaying from '../components/NowPlaying';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
@@ -11,18 +13,18 @@ interface Props {
 const { title, currentPath = '/' } = Astro.props;
 
 const navItems = [
-  { path: '/', label: 'home', icon: 'home' },
+  { path: '/home', label: 'home', icon: 'home' },
   { path: '/films', label: 'films', icon: 'movie' },
   { path: '/art', label: 'art', icon: 'brush' },
   { path: '/labs', label: 'labs', icon: 'biotech' },
   { path: '/about', label: 'about', icon: 'person' },
 ];
 
-const isActive = (path: string) => currentPath === path || (currentPath === '/' && path === '/');
+const isActive = (path: string) => currentPath === path;
 ---
 
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html class="dark bg-[#131313]" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,43 +37,52 @@ const isActive = (path: string) => currentPath === path || (currentPath === '/' 
   <ClientRouter />
 </head>
 <body class="font-body-reg text-on-surface selection:bg-secondary selection:text-on-secondary overflow-hidden h-screen">
-  <aside class="flex flex-col h-full fixed left-0 top-0 p-4 w-[170px] h-screen border-r border-emerald-900/30 bg-[#2B3D37] z-50">
-    <div class="mb-10 flex flex-col items-center text-center" data-astro-transition="persist">
-      <TommaLogo client:load />
-      <p class="font-label-mono text-[10px] text-emerald-100/40 mt-1 text-center">tomma.gallery v1.1 -stable</p>
-    </div>
-    <nav class="flex-grow space-y-1">
+  <ShaderBg client:load />
+  <aside class="flex flex-col h-full fixed left-0 top-0 p-2 w-12 md:w-16 h-screen border-r border-emerald-900/30 bg-[#2B3D37] z-50 transition-all duration-300">
+    <nav class="flex-grow space-y-1 mt-2">
       {navItems.map((item) => (
         <a 
-          class={`flex items-center p-2 transition-colors duration-150 text-sm lowercase tracking-tight ${
+          class={`flex items-center justify-center p-2 transition-colors duration-150 text-sm lowercase tracking-tight ${
             isActive(item.path) 
-              ? 'text-[#9cff93] font-bold before:content-[">"] before:mr-2 bg-emerald-900/40' 
+              ? 'text-[#9cff93] font-bold bg-emerald-900/40' 
               : 'text-emerald-100/50 hover:text-emerald-50 hover:bg-emerald-900/20'
           }`}
           href={item.path}
+          title={item.label}
         >
-          <span class="material-symbols-outlined mr-3 text-lg">{item.icon}</span>
-          <span>{item.label}</span>
+          <span class="material-symbols-outlined text-xl">{item.icon}</span>
         </a>
       ))}
     </nav>
-    <div class="mt-auto space-y-2 pt-4 border-t border-emerald-900/50">
-      <div class="flex items-center justify-between px-2 text-[10px] font-label-mono text-emerald-100/40">
-        <div class="flex items-center">
-          <span class="material-symbols-outlined text-[12px] mr-1">speed</span>
-          <span>lat: 24ms</span>
-        </div>
-      </div>
-      <div class="flex items-center justify-between px-2 text-[10px] font-label-mono text-[#9cff93]">
-        <div class="flex items-center">
-          <span class="material-symbols-outlined text-[12px] mr-1">check_circle</span>
-          <span>online</span>
-        </div>
-      </div>
-    </div>
   </aside>
-  <main class="ml-[170px] h-screen flex flex-col bg-[#131313]">
-    <slot />
+  <main class="ml-12 md:ml-16 h-screen flex flex-col">
+    <header class="h-20 flex items-center px-4 border-b border-emerald-900/30 shrink-0">
+      <div class="flex items-center" data-astro-transition="persist">
+        <div class="w-8 h-8 md:w-10 md:h-10 -mt-2">
+          <TommaLogo client:load />
+        </div>
+      </div>
+      <div class="flex-1 flex items-center justify-end gap-2 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
+        {currentPath === '/' ? (
+          <><span class="text-secondary">[ root ]</span></>
+        ) : (
+          <>
+            <span class="text-secondary">[ root ]</span>
+            <span class="opacity-30"> / </span>
+            {currentPath.split('/').filter(Boolean).map((segment, i, arr) => (
+              <span key={segment}>
+                <span class="text-primary-fixed-dim">{segment}</span>
+                {i < arr.length - 1 && <span class="opacity-30"> / </span>}
+              </span>
+            ))}
+          </>
+        )}
+        <NowPlaying client:load />
+      </div>
+    </header>
+    <div class="flex-grow overflow-y-auto custom-scrollbar flex flex-col">
+      <slot />
+    </div>
   </main>
 </body>
 </html>

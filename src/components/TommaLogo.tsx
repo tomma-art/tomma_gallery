@@ -42,9 +42,12 @@ export default function TommaLogo() {
     }
   }
   
-  return (
-    <div className="relative w-28 h-12 rounded-md overflow-hidden bg-[#0a120c] border border-[#7bdc75]/30">
-      <svg width="100%" height="100%" viewBox="0 0 28 12" preserveAspectRatio="none" className="absolute inset-0 opacity-70">
+return (
+    <div className="group relative w-28 h-12 rounded-md overflow-hidden bg-[#0a120c] border border-[#7bdc75]/30 hover:border-[#ffeb3b]/50 transition-colors duration-300 flex items-center justify-center">
+      <span className="font-[Doto] text-lg font-bold text-[#7bdc75] group-hover:text-[#ffeb3b] transition-colors duration-300 tracking-widest lowercase">
+        TOMMA
+      </span>
+      <svg width="100%" height="100%" viewBox="0 0 28 12" preserveAspectRatio="none" className="absolute inset-0 opacity-50 [&_rect]:transition-colors [&_rect]:duration-300 group-hover:[&_rect]:fill-[#ffeb3b]">
         {dots.map((dot, i) => (
           <rect
             key={i}
@@ -52,16 +55,11 @@ export default function TommaLogo() {
             y={dot.y}
             width="1"
             height="1"
-            fill="#7bdc75"
-            opacity={dot.opacity}
+            style={{ fill: '#7bdc75', opacity: dot.opacity * 0.5 }}
           />
         ))}
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <h1 className="font-display-lg text-[#7bdc75] lowercase tracking-tight select-none">
-          tomma
-        </h1>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#7bdc75]/0 to-[#7bdc75]/5 group-hover:to-[#ffeb3b]/10 transition-colors duration-300" />
     </div>
   );
 }

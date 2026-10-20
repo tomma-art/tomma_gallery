@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="home" currentPath="/home">
+  <div class="h-full relative overflow-hidden bg-black">
+    <!-- Video Background - muted autoplay -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="w-full h-full" style="transform: scale(1.5); transform-origin: center center;">
+        <iframe 
+          class="w-full h-full pointer-events-none"
+          src="https://player.vimeo.com/video/349586952?title=0&byline=0&portrait=0&autoplay=1&loop=1&muted=1&background=1&playsinline=1"
+          frameborder="0"
+          allow="autoplay"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black/50" />
+
+    <!-- Content -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+      <h1 class="font-display text-[15vw] md:text-[10vw] font-bold text-white tracking-tighter leading-none mb-4">
+        tomma
+      </h1>
+      <p class="font-body-reg text-sm md:text-base text-white/50 mb-12">
+        tomma is Tom Maher
+      </p>
+      <button 
+        id="watchReelBtn"
+        class="font-mono text-xs text-white/60 hover:text-white tracking-[0.2em] uppercase border border-white/30 hover:border-white px-6 py-3 transition-all duration-300"
+      >
+        [ watch reel ]
+      </button>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div 
+      id="reelModal" 
+      class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center hidden"
+    >
+      <div class="relative w-full max-w-5xl mx-4">
+        <button 
+          id="closeModalBtn"
+          class="absolute -top-10 right-0 font-mono text-xs text-white/60 hover:text-white tracking-widest uppercase"
+        >
+          [ close ]
+        </button>
+        <div class="aspect-video relative bg-black">
+          <iframe 
+            id="reelPlayer"
+            class="w-full h-full absolute inset-0"
+            src=""
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const btn = document.getElementById('watchReelBtn');
+  const modal = document.getElementById('reelModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const player = document.getElementById('reelPlayer');
+
+  btn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+    player.src = 'https://player.vimeo.com/video/349586952?title=1&byline=1&portrait=0&autoplay=1&loop=0&muted=0';
+  });
+
+  const close = () => {
+    modal.classList.add('hidden');
+    player.src = '';
+  };
+
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+</script>

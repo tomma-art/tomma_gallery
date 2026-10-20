@@ -11,25 +11,27 @@ export function getStaticPaths() {
 }
 
 const { film } = Astro.props;
+
+function getEmbedUrl(url: string) {
+  if (!url) return '';
+  // Convert vimeo.com/123456 to player.vimeo.com/video/123456
+  const match = url.match(/vimeo\.com\/(\d+)/);
+  if (match) {
+    return `https://player.vimeo.com/video/${match[1]}`;
+  }
+  return url;
+}
+
+const embedUrl = getEmbedUrl(film.videoUrl);
 ---
 
-<Layout title={film.title} currentPath="/films">
-  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
-    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
-      <span class="text-secondary">[ root ]</span>
-      <span class="opacity-30">/</span>
-      <span>films</span>
-      <span class="opacity-30">/</span>
-      <span class="text-primary-fixed-dim">{film.slug}</span>
-    </div>
-  </header>
-
+<Layout title={film.title} currentPath={`/films/${film.slug}`}>
   <div class="flex-grow overflow-y-auto custom-scrollbar">
     <!-- Hero / Trailer Block -->
     <section class="w-full aspect-video relative bg-black">
-      {film.videoUrl ? (
+      {embedUrl ? (
         <iframe 
-          src={film.videoUrl} 
+          src={embedUrl} 
           class="w-full h-full absolute inset-0"
           frameborder="0" 
           allow="autoplay; fullscreen"
@@ -51,6 +53,19 @@ const { film } = Astro.props;
           <p class="font-body-reg text-on-surface-variant leading-relaxed">
             {film.description}
           </p>
+          {film.filmfreeway && (
+          <div class="border-l-2 border-secondary pl-4">
+            <a 
+              href={film.filmfreeway}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group inline-flex items-center gap-2 font-mono text-xs text-secondary/70 hover:text-secondary transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+              <span>view on Film Freeway</span>
+            </a>
+          </div>
+          )}
           
           <!-- Tech Specs -->
           <div class="tui-border bg-[#1a1a1a] p-4">
@@ -77,33 +92,37 @@ const { film } = Astro.props;
           </div>
           
           {film.awards && film.awards.length > 0 && (
-            <div class="tui-border bg-[#1a1a1a] p-4">
-              <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ awards ]</h2>
+          <div class="tui-border bg-[#1a1a1a] p-4">
+            <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ awards ]</h2>
+            <div class="space-y-1 text-xs">
               {film.awards.map((award) => (
-                <p class="text-white mb-1 text-sm">{award}</p>
+                <div><span class="text-secondary">{award.title}</span> <span class="text-white">{award.festival}</span></div>
               ))}
             </div>
+          </div>
           )}
+          
         </div>
       </div>
     </section>
 
     <!-- Gallery -->
     {film.stills && film.stills.length > 0 && (
-    <section class="px-8 pb-8">
+    <section class="px-4 pb-8">
       <div class="tui-border bg-[#1a1a1a] p-4 mb-4">
         <h2 class="font-label-mono text-[10px] text-secondary uppercase">[ gallery ]</h2>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        {film.stills.map((still, i) => (
+      <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-2 space-y-2">
+        {(film.stills || []).map((still, i) => (
           <button 
-            class="aspect-video bg-[#0a0a0a] overflow-hidden cursor-pointer group"
-            onclick={`window.openLightbox(${i})`}
+            class="gallery-item w-full block overflow-hidden"
+            onclick={`openFilmLightbox(${i})`}
           >
             <img 
               src={still} 
               alt={`Still ${i + 1}`}
-              class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+              class="w-full h-auto block grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105"
+              loading="lazy"
             />
           </button>
         ))}
@@ -117,10 +136,30 @@ const { film } = Astro.props;
       <div class="tui-border bg-[#1a1a1a] p-6">
         <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-4">[ credits ]</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {film.credits.map((credit) => (
+          {film.credits.map((credit) => {
+            const names = credit.name.split('|').map(n => n.trim()).filter(n => n);
+            return (
             <div>
               <span class="font-label-mono text-[10px] text-secondary">{credit.role}</span>
-              <p class="text-white">{credit.name}</p>
+              <p class="text-white">{names.join(' | ')}</p>
+            </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+)}
+
+    {/* Official Selections */}
+    {film.selections && film.selections.length > 0 && (
+    <section class="px-4 pb-8">
+      <div class="tui-border bg-[#1a1a1a] p-4">
+        <h2 class="font-label-mono text-[10px] text-secondary uppercase mb-3">[ official selection ]</h2>
+        <div class="space-y-2">
+          {film.selections.map((selection) => (
+            <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 text-sm">
+              <span class="font-label-mono text-[10px] text-secondary whitespace-nowrap">{selection.date}</span>
+              <span class="text-white">{selection.festival}</span>
             </div>
           ))}
         </div>
@@ -129,11 +168,98 @@ const { film } = Astro.props;
     )}
   </div>
 
-  <Lightbox client:load images={film.stills || []} />
+<!-- Film Lightbox -->
+  <div id="film-lightbox" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-300" onclick="closeFilmLightbox()">
+    <button class="absolute top-4 right-4 text-white/50 hover:text-white z-10" onclick="closeFilmLightbox()">
+      <span class="material-symbols-outlined text-4xl">close</span>
+    </button>
+    <button class="absolute left-4 text-white/50 hover:text-white z-10" onclick="prevFilmImage(event)">
+      <span class="material-symbols-outlined text-5xl">chevron_left</span>
+    </button>
+    <button class="absolute right-4 text-white/50 hover:text-white z-10" onclick="nextFilmImage(event)">
+      <span class="material-symbols-outlined text-5xl">chevron_right</span>
+    </button>
+    <button class="absolute bottom-4 text-white/50 hover:text-white z-10" onclick="closeFilmLightbox()">
+      <span class="material-symbols-outlined text-4xl">close</span>
+    </button>
+    <img id="film-lightbox-image" src="" class="max-h-[85vh] max-w-[90vw] object-contain scale-95 transition-transform duration-300" onclick="event.stopPropagation()" />
+  </div>
 </Layout>
+
+<script is:inline define:vars={{ stills: film.stills || [] }}>
+  window.filmStills = stills;
+  window.filmIndex = 0;
+</script>
+
+<script is:inline>
+  function openFilmLightbox(index) {
+    window.filmIndex = index;
+    const lightbox = document.getElementById('film-lightbox');
+    const img = document.getElementById('film-lightbox-image');
+    img.src = window.filmStills[index];
+    lightbox.classList.remove('hidden');
+    // Trigger reflow, then add flex and animate
+    requestAnimationFrame(() => {
+      lightbox.classList.add('flex');
+      lightbox.classList.remove('opacity-0');
+      img.classList.remove('scale-95');
+      img.classList.add('scale-100');
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFilmLightbox() {
+    const lightbox = document.getElementById('film-lightbox');
+    const img = document.getElementById('film-lightbox-image');
+    lightbox.classList.add('opacity-0');
+    img.classList.remove('scale-100');
+    img.classList.add('scale-95');
+    setTimeout(() => {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  function nextFilmImage(e) {
+    e.stopPropagation();
+    window.filmIndex = (window.filmIndex + 1) % window.filmStills.length;
+    const img = document.getElementById('film-lightbox-image');
+    img.classList.remove('scale-100');
+    img.classList.add('scale-95');
+    img.src = window.filmStills[window.filmIndex];
+    requestAnimationFrame(() => {
+      img.classList.remove('scale-95');
+      img.classList.add('scale-100');
+    });
+  }
+
+  function prevFilmImage(e) {
+    e.stopPropagation();
+    window.filmIndex = (window.filmIndex - 1 + window.filmStills.length) % window.filmStills.length;
+    const img = document.getElementById('film-lightbox-image');
+    img.classList.remove('scale-100');
+    img.classList.add('scale-95');
+    img.src = window.filmStills[window.filmIndex];
+    requestAnimationFrame(() => {
+      img.classList.remove('scale-95');
+      img.classList.add('scale-100');
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('film-lightbox').classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeFilmLightbox();
+    if (e.key === 'ArrowRight') nextFilmImage(e);
+    if (e.key === 'ArrowLeft') prevFilmImage(e);
+  });
+</script>
 
 <style>
   .custom-scrollbar::-webkit-scrollbar { width: 2px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background: #9cff93; }
+  .gallery-item { break-inside: avoid; }
+  #film-lightbox { cursor: zoom-out; }
+  #film-lightbox-image { cursor: default; }
 </style>

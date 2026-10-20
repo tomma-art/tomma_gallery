@@ -1,53 +1,51 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import ShaderBg from '../components/ShaderBg';
+import { ClientRouter } from 'astro:transitions';
 ---
 
-<Layout title="home" currentPath="/">
-  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
-    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
-      <span class="text-secondary">[ root ]</span>
-      <span class="opacity-30">/</span>
-      <span>home</span>
-      <span class="opacity-30">/</span>
-      <span class="text-primary-fixed-dim">shell.sh</span>
+<!DOCTYPE html>
+<html class="dark bg-[#131313]" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Doto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <title>tomma</title>
+  <ClientRouter />
+</head>
+<body class="font-body-reg text-on-surface selection:bg-secondary selection:text-on-secondary overflow-hidden h-screen bg-[#131313]">
+  <ShaderBg client:load />
+
+  <div class="h-full relative flex flex-col items-center justify-center px-6">
+    <div class="text-center">
+      <h1 class="font-display text-[20vw] md:text-[12vw] font-bold text-white/90 tracking-tighter leading-none mb-6">
+        tomma
+      </h1>
+      <div class="flex flex-col items-center gap-2 mb-16">
+        <span class="font-mono text-[10px] md:text-xs text-white/40 tracking-[0.3em] uppercase">
+          filmmaker / visual designer
+        </span>
+        <span class="font-mono text-[10px] text-white/20 tracking-[0.3em] uppercase">
+          Tom Maher
+        </span>
+      </div>
+      <a 
+        href="/home" 
+        class="group inline-flex items-center gap-3 font-mono text-xs text-white/40 hover:text-white/80 tracking-[0.25em] uppercase transition-all duration-500"
+      >
+        <span class="w-8 h-px bg-white/20 group-hover:w-12 group-hover:bg-white/60 transition-all duration-500" />
+        <span>enter</span>
+        <span class="w-8 h-px bg-white/20 group-hover:w-12 group-hover:bg-white/60 transition-all duration-500" />
+      </a>
     </div>
-    <div class="flex items-center space-x-6">
-      <div class="flex space-x-1">
-        <span class="w-2 h-2 rounded-full bg-error/40"></span>
-        <span class="w-2 h-2 rounded-full bg-secondary/40"></span>
-        <span class="w-2 h-2 rounded-full bg-primary/40"></span>
-      </div>
-    </div>
-  </header>
-  
-  <div class="flex-grow overflow-y-auto p-8 custom-scrollbar flex items-center justify-center">
-    <div class="w-full max-w-4xl">
-      <div class="mb-12 border-l-2 border-secondary pl-6">
-        <h2 class="font-display-lg text-2xl text-primary lowercase mb-2"> Who is tomma?</h2>
-        <p class="font-body-reg text-sm text-on-surface-variant max-w-2xl">
-          tomma is Tom Maher
-        </p>
-      </div>
-      
-      <div class="tui-border bg-[#1a1a1a] overflow-hidden">
-        <div class="h-8 flex items-center justify-between px-3 bg-emerald-900/10 border-b border-emerald-900/20">
-          <span class="font-label-mono text-[10px] text-secondary tracking-tighter uppercase">[ VIDEO_REEL ]</span>
-          <span class="font-label-mono text-[10px] text-on-surface-variant opacity-50">ready</span>
-        </div>
-        <div class="aspect-video relative bg-black">
-          <iframe 
-            class="w-full h-full absolute inset-0"
-            src="https://player.vimeo.com/video/349586952?title=0&byline=0&portrait=0&autoplay=0&loop=1&muted=0"
-            frameborder="0"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="p-4 flex items-center justify-between border-t border-emerald-900/20">
-          <span class="font-label-mono text-[10px] text-on-surface-variant/40">encoder: html5</span>
-          <span class="font-label-mono text-[10px] text-secondary">[ execute ]</span>
-        </div>
-      </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/15">
+      <span class="font-mono text-[8px] tracking-[0.3em] uppercase">view work</span>
+      <div class="w-px h-6 bg-white/15" />
     </div>
   </div>
-</Layout>
+</body>
+</html>

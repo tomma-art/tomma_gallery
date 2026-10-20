@@ -1,37 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getAllFilms } from '../../content/films/loader';
+import FilmThumbnail from '../../components/FilmThumbnail';
 
 const films = getAllFilms();
 ---
 
 <Layout title="films" currentPath="/films">
-  <header class="h-16 flex items-center justify-between px-8 border-b border-outline-variant/30">
-    <div class="flex items-center space-x-4 font-label-mono text-[11px] tracking-widest text-on-surface-variant">
-      <span class="text-secondary">[ root ]</span>
-      <span class="opacity-30">/</span>
-      <span>films</span>
-      <span class="opacity-30">/</span>
-      <span class="text-primary-fixed-dim">index.sh</span>
-    </div>
-    <div class="flex items-center space-x-6">
-      <div class="flex space-x-1">
-        <span class="w-2 h-2 rounded-full bg-error/40"></span>
-        <span class="w-2 h-2 rounded-full bg-secondary/40"></span>
-        <span class="w-2 h-2 rounded-full bg-primary/40"></span>
-      </div>
-    </div>
-  </header>
-  
   <div class="flex-grow overflow-y-auto p-8 custom-scrollbar">
-    <div class="mb-12 border-l-2 border-secondary pl-6">
-      <h2 class="font-display-lg text-2xl text-primary lowercase mb-2">film_index</h2>
-      <p class="font-body-reg text-sm text-on-surface-variant max-w-2xl">
-        ━━━━ archival log of cinematographic assets and visual experiments. 
-        all entries are rendered in raw format. browse by technical metadata.
-      </p>
-    </div>
-    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
       {films.map((film) => (
         <a href={`/films/${film.slug}`} class="tui-border bg-[#1a1a1a] hover:bg-[#201f1f] transition-all group overflow-hidden block">
@@ -40,8 +16,8 @@ const films = getAllFilms();
             <span class="font-label-mono text-[10px] text-on-surface-variant opacity-50">{film.year || film.date}</span>
           </div>
           <div class="aspect-video relative overflow-hidden bg-black">
-            <img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500" src={film.image || film.stills?.[0]} alt={film.title} />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <FilmThumbnail client:load stills={film.stills.filter(s => s.split('/').pop()?.startsWith('4085'))} alt={film.title} />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
             <div class="absolute bottom-4 left-4">
               <h3 class="font-headline-md text-lg text-white lowercase">{film.title}</h3>
             </div>
