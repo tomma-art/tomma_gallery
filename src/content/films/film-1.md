@@ -8,13 +8,7 @@ resolution: "6K"
 year: "2025"
 client: "CEM"
 role: "Director / DP / Editor"
-stills:
-  - "/images/films/film-1/still-1.jpg"
-  - "/images/films/film-1/still-2.jpg"
-  - "/images/films/film-1/still-3.jpg"
-  - "/images/films/film-1/still-4.jpg"
-  - "/images/films/film-1/still-5.jpg"
-  - "/images/films/film-1/still-6.jpg"
+stills: []
 credits:
   - { role: "Director", name: "Tom Maher" }
   - { role: "Editor", name: "Tom Maher" }

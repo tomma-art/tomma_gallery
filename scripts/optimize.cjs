@@ -17,7 +17,7 @@ const DEFAULT_QUALITY = 80;
 const MAX_WIDTH = 2000;
 
 const args = process.argv.slice(2);
-const folderArg = args.find(a => a.startsWith('--folder=')?.replace('--folder=', ''));
+const folderArg = args.find(a => a.startsWith('--folder='))?.replace('--folder=', '');
 const allArg = args.includes('--all');
 
 function getFolders() {

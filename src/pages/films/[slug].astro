@@ -14,8 +14,8 @@ const { film } = Astro.props;
 
 function getEmbedUrl(url: string) {
   if (!url) return '';
-  // Convert vimeo.com/123456 to player.vimeo.com/video/123456
-  const match = url.match(/vimeo\.com\/(\d+)/);
+  // Convert vimeo.com/123456[/hash] to player.vimeo.com/video/123456
+  const match = url.match(/vimeo\.com\/(\d+)(?:\/|$)/);
   if (match) {
     return `https://player.vimeo.com/video/${match[1]}`;
   }

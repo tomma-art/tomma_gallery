@@ -7,7 +7,7 @@ socials:
   - { name: "email", link: "mailto:mahercreative@gmail.com" }
   - { name: "instagram", link: "https://instagram.com/tomma.cine" }
   - { name: "vimeo", link: "https://vimeo.com/tommaher" }
-  - { name: "linkedin", link: "https://linkedin.com/in/tommaher" }
+  - { name: "linkedin", link: "https://www.linkedin.com/in/tom-maher-creative/" }
 brands:
   - "Roland"
   - "Petland"
