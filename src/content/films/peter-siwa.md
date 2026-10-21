@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/peter-siwa/thumbnail.webp"
 order: 14
 title: "Peter Siwa"
 videoUrl: "https://vimeo.com/465156129"

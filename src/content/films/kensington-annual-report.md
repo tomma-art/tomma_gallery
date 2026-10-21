@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/kensington-annual-report/thumbnail.webp"
 order: 15
 title: "Kensington Annual Report '18/'19"
 videoUrl: "https://vimeo.com/465155775"

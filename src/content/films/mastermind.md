@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/mastermind/thumbnail.webp"
 order: 12
 title: "Mastermind | Promotion"
 videoUrl: "https://vimeo.com/711014311"

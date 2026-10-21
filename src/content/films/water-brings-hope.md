@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/water-brings-hope/thumbnail.webp"
 order: 1
 title: "Water Brings Hope"
 videoUrl: "https://vimeo.com/1008161545"

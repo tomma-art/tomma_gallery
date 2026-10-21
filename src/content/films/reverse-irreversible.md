@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/reverse-irreversible/thumbnail.webp"
 order: 13
 title: "Reverse the Irreversible Trailer (2012)"
 videoUrl: "https://vimeo.com/465815372"

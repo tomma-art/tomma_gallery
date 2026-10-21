@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/wave-project/thumbnail.webp"
 order: 11
 title: "Wave Project | Detroit, Michigan"
 videoUrl: "https://vimeo.com/823197525"

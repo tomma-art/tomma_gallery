@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/florence-trio/thumbnail.webp"
 order: 10
 title: "Florence the Trio | O Come O Come"
 videoUrl: "https://vimeo.com/890409960"

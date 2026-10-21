@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/second-chance/thumbnail.webp"
 order: 16
 title: "A Second Chance | Charles Blackburn"
 videoUrl: "https://vimeo.com/465129038"

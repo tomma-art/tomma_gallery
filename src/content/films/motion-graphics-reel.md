@@ -1,4 +1,5 @@
 ---
+thumbnail: "/images/films/motion-graphics-reel/thumbnail.webp"
 order: 17
 title: "Motion Graphics Reel"
 videoUrl: "https://vimeo.com/354785295"
