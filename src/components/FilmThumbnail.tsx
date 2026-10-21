@@ -3,11 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 interface Props {
   stills: string[];
   alt: string;
+  thumbnail?: string;
 }
 
-export default function FilmThumbnail({ stills, alt }: Props) {
+export default function FilmThumbnail({ stills, alt, thumbnail }: Props) {
   const [current, setCurrent] = useState(0);
   const imgRef = useRef<HTMLImageElement>(null);
+  const useThumbnail = stills.length === 0 && thumbnail;
 
   useEffect(() => {
     if (stills.length < 2) return;
@@ -28,13 +30,15 @@ export default function FilmThumbnail({ stills, alt }: Props) {
     return () => clearInterval(interval);
   }, [stills, current]);
 
-  if (!stills.length) return null;
+  const src = useThumbnail ? thumbnail : stills[current];
+
+  if (!src) return null;
 
   return (
     <img
       ref={imgRef}
       className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
-      src={stills[current]}
+      src={src}
       alt={alt}
     />
   );

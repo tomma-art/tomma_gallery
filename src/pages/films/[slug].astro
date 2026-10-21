@@ -30,16 +30,30 @@ const embedUrl = getEmbedUrl(film.videoUrl);
     <!-- Hero / Trailer Block -->
     <section class="w-full aspect-video relative bg-black">
       {embedUrl ? (
-        <iframe 
-          src={embedUrl} 
-          class="w-full h-full absolute inset-0"
-          frameborder="0" 
-          allow="autoplay; fullscreen"
-          allowfullscreen
-        />
+        <>
+          {film.thumbnail && (
+            <img 
+              src={film.thumbnail} 
+              class="w-full h-full object-cover opacity-60"
+              alt={film.title}
+            />
+          )}
+          <iframe 
+            src={embedUrl} 
+            class="w-full h-full absolute inset-0"
+            frameborder="0" 
+            allow="autoplay; fullscreen"
+            allowfullscreen
+            loading="lazy"
+          />
+        </>
       ) : (
         <div class="w-full h-full flex items-center justify-center bg-[#0a0a0a]">
-          <span class="material-symbols-outlined text-6xl text-emerald-100/20">videocam</span>
+          {film.thumbnail ? (
+            <img src={film.thumbnail} alt={film.title} class="w-full h-full object-cover opacity-60" />
+          ) : (
+            <span class="material-symbols-outlined text-6xl text-emerald-100/20">videocam</span>
+          )}
         </div>
       )}
     </section>
@@ -107,7 +121,7 @@ const embedUrl = getEmbedUrl(film.videoUrl);
     </section>
 
     <!-- Gallery -->
-    {film.stills && film.stills.length > 0 && (
+    {(film.stills && film.stills.length > 0) || film.thumbnail && (
     <section class="px-4 pb-8">
       <div class="tui-border bg-[#1a1a1a] p-4 mb-4">
         <h2 class="font-label-mono text-[10px] text-secondary uppercase">[ gallery ]</h2>
@@ -126,6 +140,19 @@ const embedUrl = getEmbedUrl(film.videoUrl);
             />
           </button>
         ))}
+        {film.stills.length === 0 && film.thumbnail && (
+          <button 
+            class="gallery-item w-full block overflow-hidden"
+            onclick={`openFilmLightbox(0)`}
+          >
+            <img 
+              src={film.thumbnail} 
+              alt={`${film.title} thumbnail`}
+              class="w-full h-auto block grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105"
+              loading="lazy"
+            />
+          </button>
+        )}
       </div>
     </section>
     )}
@@ -186,8 +213,8 @@ const embedUrl = getEmbedUrl(film.videoUrl);
   </div>
 </Layout>
 
-<script is:inline define:vars={{ stills: film.stills || [] }}>
-  window.filmStills = stills;
+<script is:inline define:vars={{ stills: film.stills || [], thumbnail: film.thumbnail || '' }}>
+  window.filmStills = stills.length > 0 ? stills : (thumbnail ? [thumbnail] : []);
   window.filmIndex = 0;
 </script>
 

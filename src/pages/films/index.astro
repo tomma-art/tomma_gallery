@@ -16,7 +16,7 @@ const films = getAllFilms();
             <span class="font-label-mono text-[10px] text-on-surface-variant opacity-50">{film.year || film.date}</span>
           </div>
           <div class="aspect-video relative overflow-hidden bg-black">
-            <FilmThumbnail client:load stills={film.stills.filter(s => s.split('/').pop()?.startsWith('4085'))} alt={film.title} />
+            <FilmThumbnail client:load stills={film.stills.filter(s => s.split('/').pop()?.startsWith('4085'))} alt={film.title} thumbnail={film.thumbnail} />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
             <div class="absolute bottom-4 left-4">
               <h3 class="font-headline-md text-lg text-white lowercase">{film.title}</h3>
